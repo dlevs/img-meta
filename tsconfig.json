@@ -1,0 +1,23 @@
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "module": "NodeNext",
+    "target": "ES2022",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "ts-node": {
+    "files": true,
+    "esm": true,
+    "compilerOptions": {
+      "module": "nodenext"
+    }
+  }
+}

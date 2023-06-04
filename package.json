@@ -1,0 +1,28 @@
+{
+  "name": "image-ninja",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dan Levett",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@dlevs/eslint-config": "^1.0.13",
+    "@types/exif-reader": "^1.0.0",
+    "@types/lodash": "^4.14.195",
+    "@types/node": "^20.2.5",
+    "commander": "^10.0.1",
+    "eslint": "^8.42.0",
+    "exif-reader": "^1.2.0",
+    "globby": "^13.1.4",
+    "lodash": "^4.17.21",
+    "p-limit": "^4.0.0",
+    "sharp": "^0.32.1"
+  },
+  "dependencies": {
+    "@types/react": "^18.2.8"
+  }
+}
