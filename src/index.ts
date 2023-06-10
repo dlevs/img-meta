@@ -1,7 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env NODE_OPTIONS=--no-warnings node
 
-import fs from "node:fs/promises";
 import path from "node:path";
+import { stdout } from "node:process";
 
 import { Command } from "commander";
 import exifReader from "exif-reader";
@@ -27,7 +27,6 @@ program
     "Process a directory, outputting a single JSON file that describes all the images contained within."
   )
   .argument("<input-directory>", "Directory containing images to process")
-  .argument("[output-file]", "Output file to write JSON to", "./images.json")
   .option(
     "--ext",
     "Comma-separated list of file extensions to process",
@@ -37,14 +36,9 @@ program
 
 program.parse();
 
-async function processCommand(
-  srcDir: string,
-  outFile: string,
-  args: { ext: string }
-) {
-  // Get list of files to process.
+async function processCommand(srcDir: string, args: { ext: string }) {
+  // Get list of relevant files.
   const filepaths = await globby(path.join(srcDir, `**/*.{${args.ext}}`));
-  console.log(`Storing metadata for ${filepaths.length} files.`);
 
   // Get metadata for each file.
   const limit = pLimit(20);
@@ -56,9 +50,8 @@ async function processCommand(
   );
   const meta = zipObject(relativeFilepaths, metaArray);
 
-  // Save the result.
-  await fs.mkdir(path.dirname(outFile), { recursive: true });
-  await fs.writeFile(outFile, JSON.stringify(meta, null, 2));
+  // Print to stdout.
+  stdout.write(JSON.stringify(meta, null, 2));
 }
 
 const getImageMeta = async (filepath: string): Promise<ImageMeta> => {
