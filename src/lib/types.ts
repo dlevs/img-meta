@@ -1,14 +1,14 @@
-interface ImageMeta {
+export interface ImageMeta {
   width: number;
   height: number;
-  gps?: ImageMetaGPS;
+  googleMapsURL?: string;
 }
 
-interface ImageMetaGPS {
+export interface ImageMetaGPS {
   latitude: GPSCoordinates;
   latitudeRef: "N" | "S";
   longitude: GPSCoordinates;
   longitudeRef: "E" | "W";
 }
 
-type GPSCoordinates = [number, number, number];
+export type GPSCoordinates = [number, number, number];

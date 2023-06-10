@@ -4,14 +4,14 @@
     "lib": ["ES2023"],
     "isolatedModules": true,
     "esModuleInterop": true,
-    "jsx": "react-jsx",
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "module": "NodeNext",
     "target": "ES2022",
     "strict": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist"
   },
   "ts-node": {
     "files": true,

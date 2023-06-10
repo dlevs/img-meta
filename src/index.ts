@@ -10,40 +10,43 @@ import zipObject from "lodash/zipObject.js";
 import pLimit from "p-limit";
 import sharp from "sharp";
 
-import packageJson from "../package.json";
+import packageJson from "../package.json" assert { type: "json" };
+import { getGoogleMapsURL } from "./lib/gpsUtils.js";
+import { ImageMeta, ImageMetaGPS } from "./lib/types.js";
 
 const program = new Command();
 
 program
-  .name("image-ninja")
-  .description("CLI to some JavaScript string utilities")
+  .name("img-meta")
+  .description("CLI to extract metadata from images")
   .version(packageJson.version);
 
 program
-  .command("split")
-  .description("Split a string into substrings and display as an array")
-  .argument("<string>", "string to split")
-  .option("--first", "display just the first substring")
-  .option("-s, --separator <char>", "separator character", ",")
-  .action((str, options) => {
-    const limit = options.first ? 1 : undefined;
-    console.log(str.split(options.separator, limit));
-  });
+  .command("process")
+  .description(
+    "Process a directory, outputting a single JSON file that describes all the images contained within."
+  )
+  .argument("<input-directory>", "Directory containing images to process")
+  .argument("[output-file]", "Output file to write JSON to", "./images.json")
+  .option(
+    "--ext",
+    "Comma-separated list of file extensions to process",
+    "jpg,jpeg,png,ico"
+  )
+  .action(processCommand);
 
 program.parse();
 
-main();
-
-async function main() {
-  const srcDir = process.argv[2];
-
-  if (!srcDir) {
-    throw new Error("No source directory provided");
-  }
-
-  const filepaths = await globby(path.join(srcDir, "**/*.{jpg,jpeg,png}"));
+async function processCommand(
+  srcDir: string,
+  outFile: string,
+  args: { ext: string }
+) {
+  // Get list of files to process.
+  const filepaths = await globby(path.join(srcDir, `**/*.{${args.ext}}`));
   console.log(`Storing metadata for ${filepaths.length} files.`);
 
+  // Get metadata for each file.
   const limit = pLimit(20);
   const metaArray = await Promise.all(
     filepaths.map((filepath) => limit(() => getImageMeta(filepath)))
@@ -52,34 +55,10 @@ async function main() {
     (filepath) => `/${path.relative(srcDir, filepath)}`
   );
   const meta = zipObject(relativeFilepaths, metaArray);
-  await writeImagesFiles(meta);
-}
 
-async function writeImagesFiles(images: Record<string, ImageMeta>) {
-  const outDir = new URL("../node_modules/.image-ninja/", import.meta.url);
-  const typesString = await fs.readFile(
-    new URL("types.d.ts", import.meta.url),
-    "utf8"
-  );
-  const stringifiedSrc = Object.keys(images).map((filepath) => {
-    return JSON.stringify(filepath);
-  });
-
-  await fs.mkdir(outDir, { recursive: true });
-  await fs.writeFile(
-    new URL("images.js", outDir),
-    `export const images=${JSON.stringify(images)}`
-  );
-  // Write types. It might be that we can just save 1 .json file instead of
-  // .js and .d.ts, but I imagine this way is far more efficient.
-  await fs.writeFile(
-    new URL("images.d.ts", outDir),
-    [
-      typesString,
-      `type ImageNinjaProcessedSrc = ${stringifiedSrc.join(" | ")}`,
-      `export const images: Record<ImageNinjaProcessedSrc, ImageMeta>`,
-    ].join("\n\n")
-  );
+  // Save the result.
+  await fs.mkdir(path.dirname(outFile), { recursive: true });
+  await fs.writeFile(outFile, JSON.stringify(meta, null, 2));
 }
 
 const getImageMeta = async (filepath: string): Promise<ImageMeta> => {
@@ -116,8 +95,8 @@ const getImageMeta = async (filepath: string): Promise<ImageMeta> => {
     return {
       width,
       height,
-      gps: exifData?.gps
-        ? ({
+      googleMapsURL: exifData?.gps
+        ? getGoogleMapsURL({
             latitude: exifData.gps.GPSLatitude,
             latitudeRef: exifData.gps.GPSLatitudeRef,
             longitude: exifData.gps.GPSLongitude,

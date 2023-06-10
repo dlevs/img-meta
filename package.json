@@ -1,10 +1,13 @@
 {
-  "name": "image-ninja",
+  "name": "img-meta",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build && npm run lint && npm test"
   },
   "author": "Dan Levett",
   "license": "ISC",
@@ -20,9 +23,7 @@
     "globby": "^13.1.4",
     "lodash": "^4.17.21",
     "p-limit": "^4.0.0",
-    "sharp": "^0.32.1"
-  },
-  "dependencies": {
-    "@types/react": "^18.2.8"
+    "sharp": "^0.32.1",
+    "vitest": "^0.32.0"
   }
 }

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const { configure } = require("@dlevs/eslint-config");
+import { configure } from "@dlevs/eslint-config";
 
-module.exports = [
+export default [
   {
     ignores: ["dist/**"],
   },
-  ...configure(),
+  ...configure({ react: true, remix: true }),
 ];
