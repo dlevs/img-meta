@@ -3,7 +3,7 @@ This is a CLI tool that generates a JSON file with metadata about images in a di
 ## Usage
 
 ```sh
-npx img-meta process --ext jpg,png ./public > images.json
+npx img-meta process --ext jpg,png ./public > ./images.json
 ```
 
 The output looks like this:
@@ -22,3 +22,5 @@ The output looks like this:
   }
 }
 ```
+
+This is useful for easily getting the width and height properties needed to prevent layout shift when images load via the `<img />` tag. Some solutions read this data directly from the image on the fly, but that's not practical when images are deployed to a CDN, not co-located on the server with the code.
