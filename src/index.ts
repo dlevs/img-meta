@@ -182,7 +182,7 @@ async function formatAsTypeScript(meta: Dictionary<ImageMeta>) {
   // Static types (ImageMeta)
   const staticTypeString = await readFile(
     // Go up to src, since this file is in dist when compiled.
-    new URL("../src/lib/types.ts", import.meta.url),
+    new URL("../../src/lib/types.ts", import.meta.url),
     "utf8"
   );
   // Get the relevant types, between the warning comments.
