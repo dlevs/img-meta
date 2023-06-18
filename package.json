@@ -1,6 +1,6 @@
 {
   "name": "img-meta",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI for getting image meta.",
   "bin": "dist/src/index.js",
   "scripts": {
