@@ -1,6 +1,7 @@
 export interface ImageMeta {
   width: number;
   height: number;
+  date?: string;
   googleMapsURL?: string;
 }
 

@@ -18,11 +18,7 @@ const program = new Command();
 
 program
   .name("img-meta")
-  .description("CLI to extract metadata from images")
-  .version(packageJson.version);
-
-program
-  .command("process")
+  .version(packageJson.version)
   .description(
     "Process a directory, outputting a single JSON file that describes all the images contained within."
   )
@@ -56,6 +52,7 @@ async function processCommand(srcDir: string, args: { ext: string }) {
 
 const getImageMeta = async (filepath: string): Promise<ImageMeta> => {
   const sharpFile = sharp(filepath);
+
   try {
     const metadata = await sharpFile.metadata();
     const exifData = metadata.exif && exifReader(metadata.exif);
@@ -88,6 +85,9 @@ const getImageMeta = async (filepath: string): Promise<ImageMeta> => {
     return {
       width,
       height,
+      date: (
+        exifData?.exif?.DateTimeOriginal as Date | undefined
+      )?.toISOString(),
       googleMapsURL: exifData?.gps
         ? getGoogleMapsURL({
             latitude: exifData.gps.GPSLatitude,
