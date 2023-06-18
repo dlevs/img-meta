@@ -13,12 +13,14 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@types/stringify-object": "^4.0.2",
     "commander": "^10.0.1",
     "exif-reader": "^1.2.0",
     "globby": "^13.1.4",
     "lodash": "^4.17.21",
     "p-limit": "^4.0.0",
-    "sharp": "^0.32.1"
+    "sharp": "^0.32.1",
+    "stringify-object": "^5.0.0"
   },
   "devDependencies": {
     "@dlevs/eslint-config": "^1.0.14",

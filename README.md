@@ -26,3 +26,13 @@ The output looks like this:
 ```
 
 This is useful for easily getting the width and height properties needed to prevent layout shift when images load via the `<img />` tag. Some solutions read this data directly from the image on the fly, but that's not practical when images are deployed to a CDN, not co-located on the server with the code.
+
+## TypeScript
+
+TypeScript output is also supported:
+
+```sh
+npx img-meta --format typescript ./public > ./images.ts
+```
+
+This leads to more efficient type-checking when you have many, many images, which can cause IDE lag when using the JSON format.
