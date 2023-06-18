@@ -155,7 +155,11 @@ async function formatAsJSON(meta: Dictionary<ImageMeta>) {
  */
 async function formatAsTypeScript(meta: Dictionary<ImageMeta>) {
   // Boilerplate header
-  const boilerplate = "// prettier-ignore\n";
+  const boilerplate = [
+    "/* eslint-disable */",
+    "/* prettier-ignore */",
+    "",
+  ].join("\n");
 
   // Actual data
   const metaWithoutUndefined = JSON.parse(JSON.stringify(meta));
